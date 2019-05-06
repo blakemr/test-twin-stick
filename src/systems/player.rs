@@ -1,31 +1,31 @@
 use amethyst::{
-    core::{nalgebra::Vector2, Time, Transform},
-    ecs::{Join, Read, System, WriteStorage},
+    core::{nalgebra::Vector3, Time, Transform},
+    ecs::{Join, Read, ReadStorage, System, WriteStorage},
     input::InputHandler,
 };
 
-// use crate::components::player::Player;
+use crate::components::player::Player;
 
-const MOVEMENT_SCALE_X: f32 = 1.2;
-const MOVEMENT_SCALE_Y: f32 = 1.2;
+const MOVEMENT_SCALE: f32 = 100.0;
 
 pub struct PlayerMovementSystem;
 
 impl<'s> System<'s> for PlayerMovementSystem {
     type SystemData = (
         WriteStorage<'s, Transform>,
+        ReadStorage<'s, Player>,
         Read<'s, InputHandler<String, String>>,
         Read<'s, Time>,
     );
 
-    fn run(&mut self, (mut transforms, input, time): Self::SystemData) {
+    fn run(&mut self, (mut transforms, players, input, time): Self::SystemData) {
         // Stabalize movement relative to framerate
         let delta = time.delta_seconds();
 
         // Player movement tracker
-        let mut velocity: Vector2<f32> = Vector2::new(1.0, 0.0);
+        let mut velocity: Vector3<f32> = Vector3::new(0.0, 0.0, 0.0);
 
-        for transform in (&mut transforms).join() {
+        for (transform, _) in (&mut transforms, &players).join() {
             if let Some(mv_amount) = input.axis_value("player_x") {
                 velocity[0] = mv_amount as f32;
             }
@@ -39,12 +39,7 @@ impl<'s> System<'s> for PlayerMovementSystem {
                 velocity = velocity.normalize();
             }
 
-            // Test code. please ignore.
-            println!("x: {}", velocity[0]);
-            println!("y: {}", velocity[1]);
-
-            transform.translate_x(velocity[0] * delta * MOVEMENT_SCALE_X);
-            transform.translate_y(velocity[1] * delta * MOVEMENT_SCALE_Y);
+            transform.move_global(velocity * delta * MOVEMENT_SCALE);
         }
     }
 }
