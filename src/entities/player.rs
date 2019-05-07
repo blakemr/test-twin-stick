@@ -1,7 +1,7 @@
 use amethyst::{
     core::Transform,
     prelude::*,
-    renderer::{SpriteRender, SpriteSheetHandle},
+    renderer::{Flipped, SpriteRender, SpriteSheetHandle},
 };
 
 use crate::components::player::Player;
@@ -28,10 +28,12 @@ pub fn init_player(world: &mut World, x: f32, y: f32, sprite_sheet_handle: Sprit
     };
 
     // Build entity
+
     world
         .create_entity()
         .with(transform)
         .with(Player::new())
+        .with(Flipped::None)
         .with(sprite_render.clone())
         .build();
 }

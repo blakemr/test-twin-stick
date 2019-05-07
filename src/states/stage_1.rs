@@ -1,6 +1,5 @@
 use amethyst::{prelude::*, utils::application_root_dir};
 
-use crate::components::player::Player;
 use crate::entities::{camera::init_camera, player::init_player};
 use crate::utils::textures::{load_spritesheet, load_texture};
 
@@ -27,9 +26,6 @@ impl SimpleState for Stage1 {
 
         let texture_handle = load_texture(player_texture_path, &world);
         let sprite_sheet_handle = load_spritesheet(spritesheet_path, texture_handle, &world);
-
-        // Temp code. to be removed once we get some systems in place. See pong.
-        world.register::<Player>();
 
         init_player(world, PLAYER_INIT_X, PLAYER_INIT_Y, sprite_sheet_handle);
         init_camera(world, ARENA_WIDTH, ARENA_HEIGHT);
