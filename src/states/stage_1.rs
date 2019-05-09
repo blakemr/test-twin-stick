@@ -1,6 +1,6 @@
 use amethyst::{prelude::*, utils::application_root_dir};
 
-use crate::entities::{camera::init_camera, player::init_player};
+use crate::entities::{camera::init_camera, fps::init_fps_display, player::init_player};
 use crate::utils::textures::{load_spritesheet, load_texture};
 
 pub struct Stage1;
@@ -29,5 +29,6 @@ impl SimpleState for Stage1 {
 
         init_player(world, PLAYER_INIT_X, PLAYER_INIT_Y, sprite_sheet_handle);
         init_camera(world, ARENA_WIDTH, ARENA_HEIGHT);
+        init_fps_display(world);
     }
 }

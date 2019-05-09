@@ -5,6 +5,7 @@ use amethyst::{
     input::InputBundle,
     prelude::{Application, Config, GameDataBuilder},
     renderer::{ColorMask, DisplayConfig, DrawFlat2D, Pipeline, RenderBundle, Stage, ALPHA},
+    ui::{DrawUi, UiBundle},
     utils::fps_counter::FPSCounterBundle,
 };
 
@@ -33,7 +34,8 @@ fn main() -> amethyst::Result<()> {
     let pipe = Pipeline::build().with_stage(
         Stage::with_backbuffer()
             .clear_target([256.0, 256.0, 256.0, 1.0], 1.0)
-            .with_pass(DrawFlat2D::new().with_transparency(ColorMask::all(), ALPHA, None)),
+            .with_pass(DrawFlat2D::new().with_transparency(ColorMask::all(), ALPHA, None))
+            .with_pass(DrawUi::new()),
     );
 
     let game_data = GameDataBuilder::default()
@@ -41,6 +43,7 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(TransformBundle::new())?
         .with_bundle(input_bundle)?
         .with_bundle(FPSCounterBundle)?
+        .with_bundle(UiBundle::<String, String>::new())?
         .with(
             systems::PlayerMovementSystem,
             "player_movement_system",
