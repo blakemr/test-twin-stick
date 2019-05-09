@@ -5,6 +5,7 @@ use amethyst::{
     input::InputBundle,
     prelude::{Application, Config, GameDataBuilder},
     renderer::{ColorMask, DisplayConfig, DrawFlat2D, Pipeline, RenderBundle, Stage, ALPHA},
+    utils::fps_counter::FPSCounterBundle,
 };
 
 mod components;
@@ -39,16 +40,16 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(RenderBundle::new(pipe, Some(config)).with_sprite_sheet_processor())?
         .with_bundle(TransformBundle::new())?
         .with_bundle(input_bundle)?
+        .with_bundle(FPSCounterBundle)?
         .with(
-            // System to use
             systems::PlayerMovementSystem,
-            // Some arbitrary name (used for dependance tracking)
             "player_movement_system",
-            // List of dependancies
-            // I guess this is in the input_bundle???
-            //      update: yup. its hiding in there. so this is one
-            //              of those things you just "have to know."
             &["input_system"],
+        )
+        .with(
+            systems::FpsDisplaySystem,
+            "fps_display_system",
+            &["fps_counter_system"],
         );
 
     let mut game = Application::new("./", Stage1, game_data)?;
