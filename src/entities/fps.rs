@@ -20,9 +20,9 @@ pub fn init_fps_display(world: &mut World) {
 
     let fps_transform = UiTransform::new(
         "FPS".to_string(),
-        Anchor::TopMiddle,
-        0.0,
+        Anchor::TopLeft,
         50.0,
+        -50.0,
         1.0,
         200.0,
         50.0,
@@ -35,8 +35,8 @@ pub fn init_fps_display(world: &mut World) {
         .with(UiText::new(
             font.clone(),
             "N".to_string(),
-            [0., 0., 0., 0.],
-            50.,
+            [0.0, 0.0, 0.0, 1.0],
+            50.0,
         ))
         .build();
 

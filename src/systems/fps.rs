@@ -16,10 +16,8 @@ impl<'s> System<'s> for FpsDisplaySystem {
     );
 
     fn run(&mut self, (fps, mut ui_text, fps_text): Self::SystemData) {
-        println!("{}", fps.frame_fps() as i32);
-
-        // if let Some(text) = ui_text.get_mut(fps_text) {
-        //     text.text = (fps.frame_fps() as i32).to_string();
-        // }
+        if let Some(text) = ui_text.get_mut(fps_text.fps) {
+            text.text = (fps.sampled_fps() as i32).to_string();
+        }
     }
 }
